@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dados da Tabela Raspada</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  #loginArea {
+    text-align: center;
+    z-index: 2; /* Garante que a área de login esteja visível sobre o conteúdo */
+  }
+
+  /* Estilização adicional para os inputs e botão */
+  input[type="password"], button {
+    margin: 5px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #555;
+  }
+
+  input[type="password"] {
+    color: black;
+  }
+
+  #button-password {
+    background-color: #4CAF50; /* Botão de login com uma cor destacada */
+    color: white;
+    cursor: pointer;
+    }
+
+  #button-password:hover {
+    background-color: #45a049; /* Efeito hover para o botão */
+  }
+
+  #conteudoSecreto {
+    display: none; /* Começa escondido */
+    color: white; /* Garante visibilidade sobre o fundo preto */
+  }
+
+  #inputArea {
+    align-items: center;
+    display: flex; /* Transforma #inputArea em um contêiner flex */
+    flex-wrap: wrap; /* Permite que os itens sejam organizados em várias linhas, conforme necessário */
+    gap: 10px; /* Espaçamento entre os itens do contêiner flex */
+    margin-bottom: 20px;
+  }
+
+  #conteudoSecreto, #moedasInput, .input-container, label {
+    color: white; /* Garantindo que o texto seja branco para legibilidade */
+  }
+  .input-container {
+    color: white; /* Garantindo que o texto seja branco para legibilidade */
+    display: flex; /* Ativa flexbox */
+    align-items: center; /* Alinha verticalmente */
+    margin-bottom: 10px;
+    display: flex; /* Mantém o label e o input lado a lado */
+    gap: 10px; /* Espaçamento entre o label e o input */
+  }
+
+  label {
+    margin-right: 10px; /* Espaço entre o label e o input */
+  }
+
+  input[type="number"] {
+    flex-grow: 1;
+    max-width: 120px;
+    width: auto; /* Permite que o input ajuste seu tamanho automaticamente */
+    padding: 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+  }
+  #buttonContainer {
+    /* Isso faz com que o botão fique à direita */
+    display: flex; /* Usa flexbox para permitir alinhamento */
+    align-items: flex-start; /* Alinha o botão ao topo */
+  }
+  .button-comun {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .button-comun:hover {
+    background-color: #45a049;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #555; /* Bordas mais claras para se destacar no fundo preto */
+    text-align: left;
+    padding: 8px;
+  }
+  th {
+    background-color: #333; /* Fundo escuro para o cabeçalho da tabela */
+  }
+  tr:nth-child(even) {
+    background-color: #222; /* Alternando cores de fundo para linhas da tabela */
+  }
+
+  .loader {
+    border: 16px solid #444; /* Loader com cores que combinam com o tema escuro */
+    border-radius: 50%;
+    border-top: 16px solid #888;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+
+  /* Animação do Spinner */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+</head>
+<body>
+  <div id="loginArea">
+    <input type="password" id="senha" placeholder="Digite a senha">
+    <button id="button-password" onclick="verificarSenha()">Entrar</button>
+  </div>
+  <div id="conteudoSecreto" style="display: none;">
+    <div id="loadingIndicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+      <div class="loader"></div>
+    </div>
+      
+    <h2>Dados do Site PNIXDEX</h2>
+
+    <table id="dataTable">
+    </table>
+
+    <h3 style="margin-top: 16px;">Valor Itens in game(diamante)</h3>
+
+    <div id="moedasInput">
+      <div id="inputArea" style="margin-bottom: 20px; margin-top: 4px;">
+        <div class="input-container">
+          <label for="CROW">Crows</label>
+          <input type="number" id="CROW">
+        </div>
+        <div class="input-container">
+          <label for="PRO">Token</label>
+          <input type="number" id="PRO">
+        </div>
+        <div class="input-container">
+          <label for="PAP">Papyrus</label>
+          <input type="number" id="PAP">
+        </div>
+        <div class="input-container">
+          <label for="MOR">Morion</label>
+          <input type="number" id="MOR">
+        </div>
+        <div class="input-container">
+          <label for="GEA">Peça de vôo</label>
+          <input type="number" id="GEA">
+        </div>
+        <div class="input-container">
+          <label for="FEA">Ceu Azul</label>
+          <input type="number" id="FEA">
+        </div>
+        <div class="input-container">
+          <label for="TEA">Lágrima congelada</label>
+          <input type="number" id="TEA">
+        </div>
+        <button class="button-comun" style="cursor: pointer;" onclick="atualizarJSON()">Atualizar Moedas</button>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo com CROW</h3>
+    <div id="divLucroCrow"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>QCU = Quantidade de crows que serão usados, para ser certinho e não ter valor picado</span><br>
+      <span>QMC = Qtd de material comprado com a quantidade de moeda usada</span><br>
+      <span>CMDC = Compra de material se trocar o diamante por crow e comprar material</span><br>
+      <span>DNG = Qtd de diamantes para fazer o mesmo número de crow que foi gasto</span><br>
+      <span>Valor VM = Valor recebido depois que vender os materiais e tiver a taxa</span><br>
+      <span>Lucro(dia) = Lucro feito com a quantidade de diamante recebido da venda de materiais menos o tanto de diamante que as crows me dariam</span><br>
+      <span>Lucro(crow) = Lucro em crow, commitando os diamantes</span><br>
+    </div>
+    <h3 style="margin-top: 16px;">Tabela custo Commit</h3>
+    <div id="tabCusto"></div>        
+
+
+<script>
+  const diamanteCriarCrow = 84
+  const diamanteRecebidoCrow = 80
+  // Função para adicionar dados na tabela
+  function addMainDataToTable(data) {
+    const table = document.getElementById("dataTable");
+    document.getElementById("loadingIndicator").style.display = "none";
+
+    // Limpa a tabela antes de adicionar novos dados
+    table.innerHTML = `
+      <tr>
+        <th>MOEDA</th>
+        <th>CROW/DOLAR</th>
+        <th>Change(24h)</th>
+        <th>Vol (24h) Crow/Dolar</th>
+        <th>Market Cap Dolar/Qtd</th>
+      </tr>`;
+
+    // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
+    data.forEach(obj => {
+        const tr = document.createElement("tr");
+
+        // Cria as células (td) e as adiciona à linha (tr)
+        const tdValues = [
+            `${obj.nome} (${obj.id})`,
+            `${obj.precoCrow}CROW / ${obj.precoDolar}$`,
+            obj.change,
+            `${obj.volCrow} / ${obj.volDolar}`,
+            `${obj.totalVendidoDolar} / ${obj.totalVendidoQtd}`,
+        ];
+
+        tdValues.forEach(val => {
+            const td = document.createElement("td");
+            td.innerText = val;
+            tr.appendChild(td);
+        });
+
+        table.appendChild(tr);
+    });
+  }
+
+  function addTabLucro(data) {    
+    const divTable = document.getElementById("divLucroCrow");
+    const existingTable = document.getElementById("tabLucroCrow");
+    if (existingTable) {
+      existingTable.remove(); // Remove a tabela existente corretamente
+    }
+    const table = document.createElement("table");
+    table.id = "tabLucroCrow"; // Atribui um ID à nova tabela
+
+    // Limpa a tabela antes de adicionar novos dados
+    table.innerHTML = `
+      <tr>
+        <th>MOEDA</th>
+        <th>QCU</th>
+        <th>VALOR(CROW)</th>
+        <th>VALOR Game</th>
+        <th>QMC</th>
+        <th>CMDC</th>
+        <th>DNG</th>
+        <th>Valor VM</th>
+        <th>Lucro(dia)</th>
+        <th>Lucro(crow)</th>
+      </tr>`;
+    const minhasCrows = document.getElementById('CROW').value
+    // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
+    data.forEach(obj => {
+      console.log(minhasCrows,' - ', obj.precoCrow ) 
+      console.log(minhasCrows)
+        if(obj.id != 'CROW'){         
+          console.log(minhasCrows,' - ', obj.precoCrow ) 
+          const tr = document.createElement("tr");
+          const moeda = obj.id
+          const qtdCrowSeraUsado = parseFloat((Math.floor(minhasCrows/obj.precoCrow)*obj.precoCrow).toFixed(3));
+          const precoCrow = obj.precoCrow
+          const precoGame = obj.precoGame
+          const qtdMorionComprado = parseFloat((qtdCrowSeraUsado/precoCrow*obj.qtdMaterial).toFixed(3));
+          const qtdCompraMatDiaCrow = parseFloat((qtdCrowSeraUsado*diamanteRecebidoCrow/precoGame).toFixed(3));
+          const valorDiamanteCrowUsadoEmDiamante = parseFloat((qtdCrowSeraUsado*diamanteCriarCrow).toFixed(3));
+          const valorDiamanteMatVenda = parseFloat((qtdMorionComprado*precoGame*0.95).toFixed(3));
+          const lucroDia = parseFloat(((valorDiamanteMatVenda-(qtdCrowSeraUsado*diamanteCriarCrow))).toFixed(3));
+          const lucroCrow = parseFloat((lucroDia/diamanteCriarCrow).toFixed(3));
+          console.log(qtdCrowSeraUsado)
+          // Cria as células (td) e as adiciona à linha (tr)
+          const tdValues = [
+            moeda,
+            qtdCrowSeraUsado,
+            precoCrow,
+            precoGame,
+            qtdMorionComprado,
+            qtdCompraMatDiaCrow,
+            valorDiamanteCrowUsadoEmDiamante,
+            valorDiamanteMatVenda,
+            lucroDia,
+            lucroCrow,
+          ];
+          console.log(tdValues)
+          tdValues.forEach(val => {
+              const td = document.createElement("td");
+              td.innerText = val;
+              tr.appendChild(td);
+          });
+
+          table.appendChild(tr);          
+          divTable.appendChild(table);
+        }
+    });
+  }
+
+  function addTabCusto(data) {    
+    const divTable = document.getElementById("tabCusto");
+    const existingTable = document.getElementById("tableCusto");
+    if (existingTable) {
+      existingTable.remove(); // Remove a tabela existente corretamente
+    }
+    const table = document.createElement("table");
+    table.id = "tableCusto"; // Atribui um ID à nova tabela
+
+    // Limpa a tabela antes de adicionar novos dados
+    table.innerHTML = `
+      <tr>
+        <th>MOEDA</th>
+        <th>MATERIAL</th>
+        <th>QTD</th>
+        <th>Valor Commit</th>
+        <th>Preco Game</th>
+        <th>Custo Total Commit</th>
+      </tr>`;
+
+    // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
+    data.forEach(obj => {
+        const tr = document.createElement("tr");
+
+        // Cria as células (td) e as adiciona à linha (tr)
+        const tdValues = [
+            obj.id,
+            obj.material,
+            obj.qtdMaterial,
+            `${obj.diaCommit}(dia)`,
+            `${obj.precoGame}(dia)`,
+            `${((obj.precoGame*obj.qtdMaterial)+obj.diaCommit)}(dia)`,
+        ];
+
+        tdValues.forEach(val => {
+            const td = document.createElement("td");
+            td.innerText = val;
+            tr.appendChild(td);
+        });
+
+        table.appendChild(tr);
+        divTable.appendChild(table);
+    });
+  }
+
+
+  
+  // Busca os dados da API e os adiciona na tabela
+  function fetchData() {
+    document.getElementById("loadingIndicator").style.display = "block";
+  
+    fetch('http://localhost:3000/data')
+      .then(response => response.json())
+      .then(data => {
+        // Assumindo que `data` é o array de objetos diretamente do seu JSON
+        addMainDataToTable(data);
+        document.getElementById("loadingIndicator").style.display = "none";
+      })
+      .catch(error => {
+        console.error('Erro ao buscar dados:', error);
+        document.getElementById("loadingIndicator").style.display = "none";
+      });
+  }
+
+  async function obterDados(){
+    try {
+      const response = await fetch('http://localhost:3000/obter-dados');
+      const data = await response.json();
+      inputDefaultValue(data);
+      addTabCusto(data);
+      addTabLucro(data);
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  }
+
+  async function inputDefaultValue(data){
+    if(data.length > 0 && data){
+      data.forEach((moeda)=>{
+        if(moeda.id && document.getElementById(moeda.id)){
+          if(moeda.id == 'CROW'){
+            document.getElementById(moeda.id).value = moeda.minhasCrow;
+          }else{
+            document.getElementById(moeda.id).value = moeda.precoGame;
+          }
+        }
+      })
+    }
+  }
+
+  function atualizarJSON() {
+    // Encontra todos os inputs dentro do contêiner de inputs
+    const inputElements = document.querySelectorAll('#moedasInput input[type="number"]');
+    const valores = {};
+
+    // Itera sobre cada input e adiciona seu valor ao objeto 'valores'
+    inputElements.forEach(input => {
+      // Usa o id do input como chave
+      valores[input.id] = input.value;
+    });
+    console.log(valores)
+    
+    // Envia o objeto 'valores' no corpo da requisição POST
+    fetch('/atualizar-json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(valores),
+    })
+    .then(response => response.json())
+    .then(data => {
+      obterDados();
+    })
+    .catch((error) => {
+      console.error('Erro ao atualizar o JSON:', error);
+      // Aqui, você pode adicionar lógica para mostrar uma mensagem de erro ao usuário
+    });
+  }
+
+  function verificarSenha() {
+    const senhaCorreta = '1414'; // Substitua pela senha desejada
+    const senhaDigitada = document.getElementById('senha').value;
+
+    if (senhaDigitada === senhaCorreta) {
+      document.getElementById('loginArea').style.display = 'none'; // Esconde o input de senha
+      document.getElementById('conteudoSecreto').style.display = 'block'; // Mostra o conteúdo restrito
+      fetchData();
+      obterDados()
+    } else {
+      alert('Senha incorreta!');
+    }
+  }
+</script>
+
+
+</body>
+</html>
