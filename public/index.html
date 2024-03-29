@@ -126,6 +126,12 @@
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
   }
+  .color-danger{
+    color: red;
+  }
+  .color-warning{
+    color: rgb(226, 181, 97)
+  }
 
   /* Animação do Spinner */
   @-webkit-keyframes spin {
@@ -151,8 +157,7 @@
       
     <h2>Dados do Site PNIXDEX</h2>
 
-    <table id="dataTable">
-    </table>
+    <div id="divDataTable"></div>
 
     <h3 style="margin-top: 16px;">Valor Itens in game(diamante)</h3>
 
@@ -201,6 +206,21 @@
       <span>Lucro(dia) = Lucro feito com a quantidade de diamante recebido da venda de materiais menos o tanto de diamante que as crows me dariam</span><br>
       <span>Lucro(crow) = Lucro em crow, commitando os diamantes</span><br>
     </div>
+
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando Morion</h3>
+    <div id="divLucroMorion"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>QCU = Quantidade de crows que serão usados, para ser certinho e não ter valor picado</span><br>
+      <span>QMC = Qtd de material comprado com a quantidade de moeda usada</span><br>
+      <span>QDM = Quantidade de material que consigo trocando o material por diamante</span><br>
+      <span>DNG = Qtd de diamantes para fazer o mesmo número de crow que foi gasto</span><br>
+      <span>Valor VM = Valor recebido depois que vender os materiais e tiver a taxa</span><br>
+      <span>Lucro(dia) = Lucro feito com a quantidade de diamante recebido da venda de materiais menos o tanto de diamante que as crows me dariam</span><br>
+      <span>Lucro(crow) = Lucro em crow, commitando os diamantes</span><br>
+    </div>
+    <h3 style="margin-top: 16px;">Tabela custo Commit</h3>
+    <div id="tabCusto"></div>        
+
     <h3 style="margin-top: 16px;">Tabela custo Commit</h3>
     <div id="tabCusto"></div>        
 
@@ -208,9 +228,24 @@
 <script>
   const diamanteCriarCrow = 84
   const diamanteRecebidoCrow = 80
+  setInterval(fetchData, 60000);
+
+  function atualizarTabelas(data){
+    addTabCusto(data);
+    addTabLucro(data);
+  }
+
   // Função para adicionar dados na tabela
   function addMainDataToTable(data) {
-    const table = document.getElementById("dataTable");
+
+    const divTable = document.getElementById("divDataTable");
+    const existingTable = document.getElementById("dataTable");
+    if (existingTable) {
+      existingTable.remove(); // Remove a tabela existente corretamente
+    }
+    const table = document.createElement("table");
+    table.id = "dataTable"; // Atribui um ID à nova tabela
+
     document.getElementById("loadingIndicator").style.display = "none";
 
     // Limpa a tabela antes de adicionar novos dados
@@ -226,7 +261,13 @@
     // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
     data.forEach(obj => {
         const tr = document.createElement("tr");
-
+        if(obj.id == 'CROW' && obj.precoDolar>=0.75){   
+          if(obj.precoDolar > 0.75){       
+            tr.className = 'color-danger';
+          }else if(obj.precoDolar == 0.75){       
+            tr.className = 'color-warning';
+          }
+        }
         // Cria as células (td) e as adiciona à linha (tr)
         const tdValues = [
             `${obj.nome} (${obj.id})`,
@@ -242,28 +283,30 @@
             tr.appendChild(td);
         });
 
-        table.appendChild(tr);
+        table.appendChild(tr);        
+        divTable.appendChild(table);
     });
   }
 
-  function addTabLucro(data) {    
-    const divTable = document.getElementById("divLucroCrow");
-    const existingTable = document.getElementById("tabLucroCrow");
+  function addTabMorion(data) { 
+    const divTable = document.getElementById("divLucroMorion");
+    const existingTable = document.getElementById("tabLucroMorion");
     if (existingTable) {
       existingTable.remove(); // Remove a tabela existente corretamente
     }
     const table = document.createElement("table");
-    table.id = "tabLucroCrow"; // Atribui um ID à nova tabela
+    table.id = "tabLucroMorion"; // Atribui um ID à nova tabela
 
     // Limpa a tabela antes de adicionar novos dados
     table.innerHTML = `
       <tr>
-        <th>MOEDA</th>
+        <th>MOEDA USE>CONVERT</th>
         <th>QCU</th>
-        <th>VALOR(CROW)</th>
-        <th>VALOR Game</th>
+        <th>VALOR(CROW/u)</th>
+        <th>VALOR Game</th>        
+        <th>VALOR Venda</th>        
+        <th>QDM</th>
         <th>QMC</th>
-        <th>CMDC</th>
         <th>DNG</th>
         <th>Valor VM</th>
         <th>Lucro(dia)</th>
@@ -272,10 +315,7 @@
     const minhasCrows = document.getElementById('CROW').value
     // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
     data.forEach(obj => {
-      console.log(minhasCrows,' - ', obj.precoCrow ) 
-      console.log(minhasCrows)
         if(obj.id != 'CROW'){         
-          console.log(minhasCrows,' - ', obj.precoCrow ) 
           const tr = document.createElement("tr");
           const moeda = obj.id
           const qtdCrowSeraUsado = parseFloat((Math.floor(minhasCrows/obj.precoCrow)*obj.precoCrow).toFixed(3));
@@ -287,7 +327,6 @@
           const valorDiamanteMatVenda = parseFloat((qtdMorionComprado*precoGame*0.95).toFixed(3));
           const lucroDia = parseFloat(((valorDiamanteMatVenda-(qtdCrowSeraUsado*diamanteCriarCrow))).toFixed(3));
           const lucroCrow = parseFloat((lucroDia/diamanteCriarCrow).toFixed(3));
-          console.log(qtdCrowSeraUsado)
           // Cria as células (td) e as adiciona à linha (tr)
           const tdValues = [
             moeda,
@@ -301,7 +340,69 @@
             lucroDia,
             lucroCrow,
           ];
-          console.log(tdValues)
+          tdValues.forEach(val => {
+              const td = document.createElement("td");
+              td.innerText = val;
+              tr.appendChild(td);
+          });
+
+          table.appendChild(tr);          
+          divTable.appendChild(table);
+        }
+    });
+  }
+
+  function addTabLucro(data) { 
+    const divTable = document.getElementById("divLucroCrow");
+    const existingTable = document.getElementById("tabLucroCrow");
+    if (existingTable) {
+      existingTable.remove(); // Remove a tabela existente corretamente
+    }
+    const table = document.createElement("table");
+    table.id = "tabLucroCrow"; // Atribui um ID à nova tabela
+
+    // Limpa a tabela antes de adicionar novos dados
+    table.innerHTML = `
+      <tr>
+        <th>MOEDA</th>
+        <th>QCU</th>
+        <th>VALOR(CROW/u)</th>
+        <th>VALOR Game</th>
+        <th>QMC</th>
+        <th>CMDC</th>
+        <th>DNG</th>
+        <th>Valor VM</th>
+        <th>Lucro(dia)</th>
+        <th>Lucro(crow)</th>
+      </tr>`;
+    const minhasCrows = document.getElementById('CROW').value
+    // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
+    data.forEach(obj => {
+        if(obj.id != 'CROW'){         
+          const tr = document.createElement("tr");
+          const moeda = obj.id
+          const qtdCrowSeraUsado = parseFloat((Math.floor(minhasCrows/obj.precoCrow)*obj.precoCrow).toFixed(3));
+          const precoCrow = obj.precoCrow
+          const precoGame = obj.precoGame
+          const qtdMorionComprado = parseFloat((qtdCrowSeraUsado/precoCrow*obj.qtdMaterial).toFixed(3));
+          const qtdCompraMatDiaCrow = parseFloat((qtdCrowSeraUsado*diamanteRecebidoCrow/precoGame).toFixed(3));
+          const valorDiamanteCrowUsadoEmDiamante = parseFloat((qtdCrowSeraUsado*diamanteCriarCrow).toFixed(3));
+          const valorDiamanteMatVenda = parseFloat((qtdMorionComprado*precoGame*0.95).toFixed(3));
+          const lucroDia = parseFloat(((valorDiamanteMatVenda-(qtdCrowSeraUsado*diamanteCriarCrow))).toFixed(3));
+          const lucroCrow = parseFloat((lucroDia/diamanteCriarCrow).toFixed(3));
+          // Cria as células (td) e as adiciona à linha (tr)
+          const tdValues = [
+            moeda,
+            qtdCrowSeraUsado,
+            precoCrow,
+            precoGame,
+            qtdMorionComprado,
+            qtdCompraMatDiaCrow,
+            valorDiamanteCrowUsadoEmDiamante,
+            valorDiamanteMatVenda,
+            lucroDia,
+            lucroCrow,
+          ];
           tdValues.forEach(val => {
               const td = document.createElement("td");
               td.innerText = val;
@@ -370,6 +471,7 @@
       .then(data => {
         // Assumindo que `data` é o array de objetos diretamente do seu JSON
         addMainDataToTable(data);
+        atualizarTabelas(data);
         document.getElementById("loadingIndicator").style.display = "none";
       })
       .catch(error => {
@@ -383,8 +485,7 @@
       const response = await fetch('http://localhost:3000/obter-dados');
       const data = await response.json();
       inputDefaultValue(data);
-      addTabCusto(data);
-      addTabLucro(data);
+      atualizarTabelas(data);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
     }
@@ -404,35 +505,40 @@
     }
   }
 
-  function atualizarJSON() {
+  async function atualizarJSON() {
     // Encontra todos os inputs dentro do contêiner de inputs
     const inputElements = document.querySelectorAll('#moedasInput input[type="number"]');
+    const botaoAtualizar = document.querySelector('.button-comun'); // Seleciona o botão de atualizar
     const valores = {};
 
     // Itera sobre cada input e adiciona seu valor ao objeto 'valores'
     inputElements.forEach(input => {
-      // Usa o id do input como chave
-      valores[input.id] = input.value;
+        valores[input.id] = input.value;
+        input.disabled = true; // Desabilita o input para evitar múltiplas submissões
     });
-    console.log(valores)
-    
-    // Envia o objeto 'valores' no corpo da requisição POST
-    fetch('/atualizar-json', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(valores),
-    })
-    .then(response => response.json())
-    .then(data => {
-      obterDados();
-    })
-    .catch((error) => {
-      console.error('Erro ao atualizar o JSON:', error);
-      // Aqui, você pode adicionar lógica para mostrar uma mensagem de erro ao usuário
-    });
+    botaoAtualizar.disabled = true; // Desabilita o botão de atualizar
+
+    try {
+      const response = await fetch('/atualizar-json', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(valores),
+      });
+      const data = await response.json();
+
+      // Sucesso na atualização
+      atualizarTabelas(data);
+    } catch (error) {
+        console.error('Erro ao atualizar o JSON:', error);
+    } finally {
+        // Reabilita os inputs e o botão após a conclusão do processo
+        inputElements.forEach(input => input.disabled = false);
+        botaoAtualizar.disabled = false;
+    }
   }
+
 
   function verificarSenha() {
     const senhaCorreta = '1414'; // Substitua pela senha desejada
