@@ -59,7 +59,7 @@
     margin-bottom: 20px;
   }
 
-  #conteudoSecreto, #moedasInput, .input-container, label {
+  #conteudoSecreto, #moedasInput, #reaisInput, .input-container, label {
     color: white; /* Garantindo que o texto seja branco para legibilidade */
   }
   .input-container {
@@ -117,6 +117,20 @@
     background-color: #222; /* Alternando cores de fundo para linhas da tabela */
   }
 
+  .divTabelaRolavel {
+    overflow-x: auto;
+    max-width: 100%; /* Ajuste a largura máxima conforme necessário */
+  }
+  .divTabelaRolavel td, .divTabelaRolavel th {
+    padding: 4px 8px; /* Reduz o padding */
+    font-size: 14px; /* Ajuste o tamanho da fonte conforme necessário */
+    min-width: 60px; /* Ou outro valor conforme a necessidade */
+  }
+  #divTabelaRolavel img {
+    width: 20px; /* Ou outro valor conforme necessário */
+    height: auto;
+  }
+
   .loader {
     border: 16px solid #444; /* Loader com cores que combinam com o tema escuro */
     border-radius: 50%;
@@ -127,10 +141,13 @@
     animation: spin 2s linear infinite;
   }
   .color-danger{
-    color: red;
+    color: rgb(228, 88, 88);
   }
   .color-warning{
     color: rgb(226, 181, 97)
+  }
+  .color-sucess{
+    color: rgb(58, 224, 58)
   }
 
   /* Animação do Spinner */
@@ -159,6 +176,7 @@
 
     <div id="divDataTable"></div>
 
+    <input type="text" id="valCrowDolar" value="" hidden>
     <h3 style="margin-top: 16px;">Valor Itens in game(diamante)</h3>
 
     <div id="moedasInput">
@@ -195,8 +213,8 @@
       </div>
     </div>
 
-    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo com CROW</h3>
-    <div id="divLucroCrow"></div>   
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo com CROW(HARD)</h3>
+    <div id="divLucroCrowHard"></div>   
     <div style="color: rgb(233, 72, 72);">
       <br><span>QCU = Quantidade de crows que serão usados, para ser certinho e não ter valor picado</span><br>
       <span>QMC = Qtd de material comprado com a quantidade de moeda usada</span><br>
@@ -207,32 +225,205 @@
       <span>Lucro(crow) = Lucro em crow, commitando os diamantes</span><br>
     </div>
 
-    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando Morion</h3>
-    <div id="divLucroMorion"></div>   
-    <div style="color: rgb(233, 72, 72);">
-      <br><span>QCU = Quantidade de crows que serão usados, para ser certinho e não ter valor picado</span><br>
-      <span>QMC = Qtd de material comprado com a quantidade de moeda usada</span><br>
-      <span>QDM = Quantidade de material que consigo trocando o material por diamante</span><br>
-      <span>DNG = Qtd de diamantes para fazer o mesmo número de crow que foi gasto</span><br>
-      <span>Valor VM = Valor recebido depois que vender os materiais e tiver a taxa</span><br>
-      <span>Lucro(dia) = Lucro feito com a quantidade de diamante recebido da venda de materiais menos o tanto de diamante que as crows me dariam</span><br>
-      <span>Lucro(crow) = Lucro em crow, commitando os diamantes</span><br>
+    <div id="reaisInput">
+      <div id="inputArea" style="margin-bottom: 20px; margin-top: 4px;">
+        <div class="input-container">
+          <label for="reaisTotal">Valor em Reais</label>
+          <input type="number" id="reaisTotal">
+        </div>
+        <div class="input-container">
+          <label for="reaisDia">Reais/Dia</label>
+          <input type="number" id="reaisDia">
+        </div>
+        <div class="input-container">
+          <label for="diaReais">Dia/Reais</label>
+          <input type="number" id="diaReais">
+        </div>
+        <div class="input-container">
+          <label for="reaisDolar">Reais > 1 Dolar</label>
+          <input type="number" id="reaisDolar">
+        </div>
+        <button class="button-comun" style="cursor: pointer;" onclick="atualizarValoresReais()">Atualizar Tabela Reais</button>
+      </div>
     </div>
-    <h3 style="margin-top: 16px;">Tabela custo Commit</h3>
-    <div id="tabCusto"></div>        
+
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo comprando diamante por Reais</h3>
+    <div id="divReais" class="divTabelaRolavel"></div>    
+    <div style="color: rgb(214, 182, 0);">
+      <br><span>Valor em Reais = Total que voce vai gastar em real</span><br>
+      <span>Reais/Dia = Quanto reais para fazer x Diamante.</span><br>
+      <span>Dia/Reais = X diamante comprados com o Reais/Dia</span><br>
+      <span>Reais > 1 Dolar = Quanto em reais vale 1 dolar</span><br>
+    </div>       
+
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando Morion</h3>
+    <div id="divLucroMOR" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando Papyrus</h3>
+    <div id="divLucroPAP" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando GEA</h3>
+    <div id="divLucroGEA" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando FEA</h3>
+    <div id="divLucroFEA" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando TEA</h3>
+    <div id="divLucroTEA" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando PRO</h3>
+    <div id="divLucroPRO" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
 
     <h3 style="margin-top: 16px;">Tabela custo Commit</h3>
     <div id="tabCusto"></div>        
 
 
 <script>
+  const baseURL = window.location.origin;
   const diamanteCriarCrow = 84
   const diamanteRecebidoCrow = 80
-  setInterval(fetchData, 60000);
+  
+  const valorInvestimentoReais = 80
+  const valorReaisPorDia = 40
+  const valorDiaReais = 1000
+  const valorRealDolar = 5.02
+
+  var dataAtualizada;
+
+
+  setInterval(fetchData, 60000);data.forEach
 
   function atualizarTabelas(data){
+    dataAtualizada = data;
+    console.log('entrei')
+    document.getElementById("valCrowDolar").value = data[0].precoDolar;
+    console.log("crowDolar: ",document.getElementById("valCrowDolar").value)
     addTabCusto(data);
     addTabLucro(data);
+    addTabsMoedas(data);
+    addTabReais(data)
+  }
+
+  function atualizarValoresReais(data) {
+    addTabReais(dataAtualizada)
+  }
+  // Função para adicionar dados na tabela
+  function addTabReais(data) {
+
+    const reaisTotalVar = document.getElementById("reaisTotal").value
+    const reaisDiaVar = document.getElementById("reaisDia").value
+    const diaReaisVar = document.getElementById("diaReais").value
+    const dolarReaisVar = document.getElementById("reaisDolar").value
+    const crowDolarVar = document.getElementById("valCrowDolar").value
+
+    const divTable = document.getElementById("divReais");
+    const existingTable = document.getElementById("divReaisTable");
+    if (existingTable) {
+      existingTable.remove(); // Remove a tabela existente corretamente
+    }
+    const table = document.createElement("table");
+    table.id = "divReaisTable"; // Atribui um ID à nova tabela
+    const spans = divTable.querySelectorAll("span");
+    spans.forEach(span => span.remove());
+
+    // Limpa a tabela antes de adicionar novos dados
+    table.innerHTML = `
+      <tr>
+        <th>MOEDA</th>
+        <th>PrecoGAME</th>
+        <th>qtdMaterialCunha</th>
+        <th>custoDiaCunha</th>
+        <th>precoCrow</th>
+        <th>totalMateriais</th>        
+        <th>totalMoedaCunhada</th>
+        <th>materiaisRestantes</th>
+        <th>diamantesRestantesFinal</th>
+        <th>ganhoCrow</th>
+        <th>ganhoDolar</th>
+        <th>ganhoFinalReais</th>
+        <th>LU/PR Reais</th>
+      </tr>`;
+
+    // Calcula quantos diamantes são comprados com o investimento
+    const totalDiamantesComprados = reaisTotalVar/reaisDiaVar*diaReaisVar;
+
+    const spanReaisTotalVar = document.createElement("span");
+    const spanDolarReaisVar = document.createElement("span");
+    const spanCrowDolarVar = document.createElement("span");
+    const spanTotalDiamantesComprados = document.createElement("span");
+    spanReaisTotalVar.textContent = `Valor total em reais: ${reaisTotalVar}`
+    spanReaisTotalVar.style.display = "block"; // Exibe o span em sua própria linha
+    spanDolarReaisVar.textContent = `Valor de 1 dolar em reais: ${dolarReaisVar}`
+    spanDolarReaisVar.style.display = "block"; // Exibe o span em sua própria linha
+    spanCrowDolarVar.textContent = `Valor de 1 crow em dolar: ${crowDolarVar}`
+    spanCrowDolarVar.style.display = "block"; // Exibe o span em sua própria linha
+    spanTotalDiamantesComprados.textContent = `Quantidade total de diamantes comprados: ${totalDiamantesComprados}`
+    spanTotalDiamantesComprados.style.display = "block"; // Exibe o span em sua própria linha
+
+    // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
+    data.forEach(obj => {
+      if(obj.id != 'CROW'){
+        const lucroInvestimento = calcularLucroInvestimentoDiamante(obj.precoGame, obj.qtdMaterial, obj.diaCommit, obj.precoCrow, 
+                                  crowDolarVar, dolarReaisVar, totalDiamantesComprados)
+
+        const tr = document.createElement("tr");
+        
+        if(lucroInvestimento.ganhoFinalReais-reaisTotalVar > 0){
+          tr.className = 'color-sucess'
+        }else if(lucroInvestimento.ganhoFinalReais-reaisTotalVar == 0){
+          tr.className = 'color-warning'
+        }else{
+          tr.className = 'color-danger'
+        }
+        // Cria as células (td) e as adiciona à linha (tr)
+        const tdValues = [
+          obj.id,
+          obj.precoGame,
+          obj.qtdMaterial,
+          obj.diaCommit,
+          obj.precoCrow,
+          lucroInvestimento.totalMateriais,
+          lucroInvestimento.totalMC,
+          lucroInvestimento.materiaisRestantes,
+          lucroInvestimento.diamantesRestantesFinal,
+          lucroInvestimento.ganhoCrow,
+          lucroInvestimento.ganhoDolar,
+          lucroInvestimento.ganhoFinalReais,
+          lucroInvestimento.ganhoFinalReais-reaisTotalVar 
+        ];
+
+        tdValues.forEach(val => {
+            const td = document.createElement("td");
+            td.innerText = val;
+            tr.appendChild(td);
+        });
+
+        table.appendChild(tr);     
+      }
+    });
+    divTable.appendChild(spanReaisTotalVar)
+    divTable.appendChild(spanDolarReaisVar)
+    divTable.appendChild(spanCrowDolarVar)
+    divTable.appendChild(spanTotalDiamantesComprados)
+    divTable.appendChild(table);
   }
 
   // Função para adicionar dados na tabela
@@ -262,10 +453,18 @@
     data.forEach(obj => {
         const tr = document.createElement("tr");
         if(obj.id == 'CROW' && obj.precoDolar>=0.75){   
-          if(obj.precoDolar > 0.75){       
+          if(obj.precoDolar > 0.75 && obj.precoDolar <= 0.77){       
+            var alarme = new Audio('./audios/lvlup.mp3');
+            alarme.play();
             tr.className = 'color-danger';
-          }else if(obj.precoDolar == 0.75){       
+          }else if(obj.precoDolar == 0.75){     
+            var alarme = new Audio('./audios/bell.mp3');
+            alarme.play();
             tr.className = 'color-warning';
+          }else if(obj.precoDolar > 0.77){     
+            var alarme = new Audio('./audios/cash.mp3');
+            alarme.play();
+            tr.className = 'color-sucess';
           }
         }
         // Cria as células (td) e as adiciona à linha (tr)
@@ -284,82 +483,133 @@
         });
 
         table.appendChild(tr);        
-        divTable.appendChild(table);
     });
+    divTable.appendChild(table);
   }
 
-  function addTabMorion(data) { 
-    const divTable = document.getElementById("divLucroMorion");
-    const existingTable = document.getElementById("tabLucroMorion");
-    if (existingTable) {
-      existingTable.remove(); // Remove a tabela existente corretamente
-    }
-    const table = document.createElement("table");
-    table.id = "tabLucroMorion"; // Atribui um ID à nova tabela
-
-    // Limpa a tabela antes de adicionar novos dados
-    table.innerHTML = `
-      <tr>
-        <th>MOEDA USE>CONVERT</th>
-        <th>QCU</th>
-        <th>VALOR(CROW/u)</th>
-        <th>VALOR Game</th>        
-        <th>VALOR Venda</th>        
-        <th>QDM</th>
-        <th>QMC</th>
-        <th>DNG</th>
-        <th>Valor VM</th>
-        <th>Lucro(dia)</th>
-        <th>Lucro(crow)</th>
-      </tr>`;
-    const minhasCrows = document.getElementById('CROW').value
-    // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
+  function addTabsMoedas(data) { 
     data.forEach(obj => {
-        if(obj.id != 'CROW'){         
-          const tr = document.createElement("tr");
-          const moeda = obj.id
-          const qtdCrowSeraUsado = parseFloat((Math.floor(minhasCrows/obj.precoCrow)*obj.precoCrow).toFixed(3));
-          const precoCrow = obj.precoCrow
-          const precoGame = obj.precoGame
-          const qtdMorionComprado = parseFloat((qtdCrowSeraUsado/precoCrow*obj.qtdMaterial).toFixed(3));
-          const qtdCompraMatDiaCrow = parseFloat((qtdCrowSeraUsado*diamanteRecebidoCrow/precoGame).toFixed(3));
-          const valorDiamanteCrowUsadoEmDiamante = parseFloat((qtdCrowSeraUsado*diamanteCriarCrow).toFixed(3));
-          const valorDiamanteMatVenda = parseFloat((qtdMorionComprado*precoGame*0.95).toFixed(3));
-          const lucroDia = parseFloat(((valorDiamanteMatVenda-(qtdCrowSeraUsado*diamanteCriarCrow))).toFixed(3));
-          const lucroCrow = parseFloat((lucroDia/diamanteCriarCrow).toFixed(3));
-          // Cria as células (td) e as adiciona à linha (tr)
-          const tdValues = [
-            moeda,
-            qtdCrowSeraUsado,
-            precoCrow,
-            precoGame,
-            qtdMorionComprado,
-            qtdCompraMatDiaCrow,
-            valorDiamanteCrowUsadoEmDiamante,
-            valorDiamanteMatVenda,
-            lucroDia,
-            lucroCrow,
-          ];
-          tdValues.forEach(val => {
-              const td = document.createElement("td");
-              td.innerText = val;
-              tr.appendChild(td);
-          });
-
-          table.appendChild(tr);          
-          divTable.appendChild(table);
+      if(obj.id != 'CROW'){
+        const divTable = document.getElementById(`divLucro${obj.id}`);
+        const existingTable = document.getElementById(`tabLucro${obj.id}`);
+        if (existingTable) {
+          existingTable.remove(); // Remove a tabela existente corretamente
         }
+        const spans = divTable.querySelectorAll("span");
+        spans.forEach(span => span.remove());
+
+        const table = document.createElement("table");
+        table.id = `tabLucro${obj.id}`; // Atribui um ID à nova tabela
+        // Limpa a tabela antes de adicionar novos dados
+        table.innerHTML = `
+          <tr>
+            <th>USE>CONVERT</th>
+            <th>valorMC(CROW/u)</th>
+            <th>precoMoedaMCParaLucro</th>
+            <th>valorGameMC</th>     
+            <th>qtdPossivelMoedaMC</th>     
+            <th>diamantesRestantes</th>     
+            <th>materiaisRestantes</th>     
+            <th>ganhoCrow</th>   
+            <th>Lucro/PrejuízoCrow</th>     
+          </tr>`;  
+
+        const minhasCrows = document.getElementById('CROW').value
+        const spanSaldoInicialCrow = document.createElement("span");
+        const spanPrecoCrowMU = document.createElement("span");
+        const spanValorDiamanteMU = document.createElement("span");
+        const spanQtdCrowsMU = document.createElement("span");
+        const spanQtdMoedasMU = document.createElement("span");
+        const spanDiaGanhosComMU = document.createElement("span");
+        spanSaldoInicialCrow.textContent = `Saldo de crow: ${minhasCrows}`
+        spanSaldoInicialCrow.style.display = "block"; // Exibe o span em sua própria linha
+        spanPrecoCrowMU.textContent = `Valor da moeda em crow: ${obj.precoCrow}`
+        spanPrecoCrowMU.style.display = "block"; // Exibe o span em sua própria linha
+        spanValorDiamanteMU.textContent = `Valor do material no jogo(dia): ${obj.precoGame}`
+        spanValorDiamanteMU.style.display = "block"; // Exibe o span em sua própria linha    
+        // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela    
+        data.forEach(objConvert => {
+          //minhasCrows, obj.precoCrow, obj.precoGame, obj.qtdMaterial, objConvert.precoCrow, objConvert.precoGame, objConvert.diaCommit, objConvert.qtdMaterial
+            if(objConvert.id != obj.id && objConvert.id != 'CROW'){   
+              const opEntreMoedas = calcularOperacoesEntreMoedas(minhasCrows, obj.precoCrow, obj.precoGame, obj.qtdMaterial, 
+              objConvert.precoCrow, objConvert.precoGame, objConvert.diaCommit, 
+              objConvert.qtdMaterial)
+
+              const tr = document.createElement("tr");
+
+              const imgMoedaUser = `<img src="${obj.imgMoeda}" alt="Ícone" style="width: 20px; height: 20px;">`
+              const imgMoedaConvert = `<img src="${objConvert.imgMoeda}" alt="Ícone" style="width: 20px; height: 20px;">`
+              const imgMoeda = `${imgMoedaUser}>>${imgMoedaConvert}`
+              const nomeMoeda = `${obj.id}>>${objConvert.id}`
+              const crowsUsadasParaMU = opEntreMoedas.crowsUsadasParaMU
+              const qtdMoedasMU = opEntreMoedas.quantidadeCompradaMU
+              const diamantesGanhosComMU = opEntreMoedas.diamantesGanhosComMU
+              const valorMC = objConvert.precoCrow
+              const precoMoedaMCParaLucro = opEntreMoedas.precoVendaCrowMCParaLucro
+              const valorGameMC = objConvert.precoGame
+              const qtdPossivelMC = opEntreMoedas.qtdPossivelMC
+              const diamantesRestantes = opEntreMoedas.diamantesRestantes
+              const materiaisRestantes = opEntreMoedas.materiaisRestantes
+              const ganhoCrow = opEntreMoedas.ganhoCrow
+              const lucroPrejuizo = opEntreMoedas.ganhoCrow-crowsUsadasParaMU
+
+              spanQtdCrowsMU.textContent = `Qtd de crows que irei usar: ${crowsUsadasParaMU}`
+              spanQtdCrowsMU.style.display = "block"; // Exibe o span em sua própria linha   
+              spanQtdMoedasMU.textContent = `Qtd de moedas que terei: ${qtdMoedasMU}`
+              spanQtdMoedasMU.style.display = "block"; // Exibe o span em sua própria linha   
+              spanDiaGanhosComMU.textContent = `Qtd de diamantes que farei: ${diamantesGanhosComMU}`
+              spanDiaGanhosComMU.style.display = "block"; // Exibe o span em sua própria linha   
+
+              const teriaLucro = opEntreMoedas.teriaLucro
+
+              if(lucroPrejuizo>0){
+                tr.className = 'color-sucess'
+              }else if(lucroPrejuizo == 0){
+                tr.className = 'color-warning'
+              }else{
+                tr.className = 'color-danger'
+              }
+
+              // Cria as células (td) e as adiciona à linha (tr)
+              const tdValues = [
+                nomeMoeda,
+                valorMC,
+                precoMoedaMCParaLucro,
+                valorGameMC,
+                qtdPossivelMC,
+                diamantesRestantes,
+                materiaisRestantes,
+                parseFloat(ganhoCrow.toFixed(3)),
+                parseFloat(lucroPrejuizo.toFixed(3))              
+              ];
+              tdValues.forEach(val => {
+                  const td = document.createElement("td");
+                  td.innerText = val;
+                  tr.appendChild(td);
+              });
+
+              table.appendChild(tr);     
+            }
+        });
+        divTable.appendChild(spanSaldoInicialCrow)
+        divTable.appendChild(spanPrecoCrowMU)
+        divTable.appendChild(spanValorDiamanteMU)
+        divTable.appendChild(spanQtdCrowsMU)
+        divTable.appendChild(spanQtdMoedasMU)
+        divTable.appendChild(spanDiaGanhosComMU)
+        divTable.appendChild(table);
+      }
     });
   }
-
+  
   function addTabLucro(data) { 
-    const divTable = document.getElementById("divLucroCrow");
-    const existingTable = document.getElementById("tabLucroCrow");
+    const divTable = document.getElementById("divLucroCrowHard");
+    const existingTable = document.getElementById("tabLucroCrowHard");
     if (existingTable) {
       existingTable.remove(); // Remove a tabela existente corretamente
     }
     const table = document.createElement("table");
-    table.id = "tabLucroCrow"; // Atribui um ID à nova tabela
+    table.id = "tabLucroCrowHard"; // Atribui um ID à nova tabela
 
     // Limpa a tabela antes de adicionar novos dados
     table.innerHTML = `
@@ -466,7 +716,8 @@
   function fetchData() {
     document.getElementById("loadingIndicator").style.display = "block";
   
-    fetch('http://localhost:3000/data')
+    //fetch('http://localhost:3000/data')
+    fetch(`${baseURL}/data`)
       .then(response => response.json())
       .then(data => {
         // Assumindo que `data` é o array de objetos diretamente do seu JSON
@@ -482,7 +733,8 @@
 
   async function obterDados(){
     try {
-      const response = await fetch('http://localhost:3000/obter-dados');
+      //const response = await fetch('http://localhost:3000/obter-dados');
+      const response = await fetch(`${baseURL}/obter-dados`);
       const data = await response.json();
       inputDefaultValue(data);
       atualizarTabelas(data);
@@ -527,9 +779,8 @@
           body: JSON.stringify(valores),
       });
       const data = await response.json();
-
       // Sucesso na atualização
-      atualizarTabelas(data);
+      atualizarTabelas(data.json);
     } catch (error) {
         console.error('Erro ao atualizar o JSON:', error);
     } finally {
@@ -545,14 +796,104 @@
     const senhaDigitada = document.getElementById('senha').value;
 
     if (senhaDigitada === senhaCorreta) {
+
       document.getElementById('loginArea').style.display = 'none'; // Esconde o input de senha
       document.getElementById('conteudoSecreto').style.display = 'block'; // Mostra o conteúdo restrito
+
+      document.getElementById("reaisTotal").value = valorInvestimentoReais
+      document.getElementById("reaisDia").value = valorReaisPorDia
+      document.getElementById("diaReais").value = valorDiaReais
+      document.getElementById("reaisDolar").value = valorRealDolar
       fetchData();
       obterDados()
     } else {
       alert('Senha incorreta!');
     }
   }
+
+function calcularOperacoesEntreMoedas(saldoInicialCrow, precoCrowMU, valorDiamanteMU, qtdMaterialMU, precoCrowMC, 
+    valorDiamanteMC, custoDiamanteCunhaMC, qtdMaterialMC, precoVendaCrowMC) {
+    // Calcula quantos MU podem ser comprados com o saldo inicial de Crow
+    const quantidadeCompradaMU = Math.floor(saldoInicialCrow / precoCrowMU);
+
+    // Calcula a quantidade de Crows usadas para comprar MU
+    const crowsUsadasParaMU = quantidadeCompradaMU * precoCrowMU;
+
+    // Calcula quantos diamantes são ganhos vendendo os materiais de MU com 5% de perda
+    const diamantesGanhosComMU = quantidadeCompradaMU * valorDiamanteMU * qtdMaterialMU * 0.95;
+
+    // Determina quantos materiais para MC podem ser obtidos com os diamantes ganhos, descontando o custo para cunhar em diamantes
+    const diamantesDisponiveisParaCompraMaterial = diamantesGanhosComMU - (custoDiamanteCunhaMC * Math.floor(diamantesGanhosComMU / (valorDiamanteMC * qtdMaterialMC + custoDiamanteCunhaMC)));
+    const totalMateriaisMC = Math.floor(diamantesDisponiveisParaCompraMaterial / valorDiamanteMC);
+    
+    // Calcula quantas MC podem ser craftadas
+    const qtdPossivelMC = Math.floor(totalMateriaisMC / qtdMaterialMC);
+
+    // Calcula os materiais restantes após a tentativa de cunhar as MC
+    const materiaisRestantes = totalMateriaisMC % qtdMaterialMC;
+
+    // Calcula os diamantes restantes após a compra dos materiais e o custo de cunhagem
+    const diamantesRestantes = diamantesDisponiveisParaCompraMaterial - (qtdPossivelMC * qtdMaterialMC * valorDiamanteMC) - (qtdPossivelMC * custoDiamanteCunhaMC);
+
+    // Calcula o ganho em Crow pela venda das MC
+    const ganhoCrow = qtdPossivelMC * precoCrowMC;
+
+    // Preço de venda de MC em Crow necessário para apenas cobrir o investimento inicial
+    const precoVendaCrowMCParaLucro = qtdPossivelMC > 0 ? saldoInicialCrow / qtdPossivelMC : Infinity;    
+
+    return {
+        crowsUsadasParaMU,
+        quantidadeCompradaMU,
+        diamantesGanhosComMU,
+        qtdPossivelMC,
+        diamantesRestantes,
+        materiaisRestantes,
+        ganhoCrow,
+        precoVendaCrowMCParaLucro: precoVendaCrowMCParaLucro.toFixed(2),
+    };
+}
+
+
+function calcularLucroInvestimentoDiamante(valorDiaMaterial, qtdMaterialMC, custoDiaCunhaMC, precoVendaCrowMC, 
+                                           valorCrowDolar, valorDolarReais, totalDiamantesComprados) {
+
+    // Conversão de Diamantes em Materiais para MC
+    const totalMateriais = totalDiamantesComprados / valorDiaMaterial;
+
+    // Calcula quantas MC podem ser cunhadas, levando em conta apenas a disponibilidade de materiais
+    const totalMC = Math.floor(totalMateriais / qtdMaterialMC);
+    
+    // Calcula os diamantes necessários para cunhar as MCs
+    const diamantesNecessariosParaCunhagem = custoDiaCunhaMC * totalMC;
+
+    // Verifica se os diamantes restantes são suficientes para a cunhagem
+    const diamantesRestantesAposMaterial = totalDiamantesComprados - (totalMC * qtdMaterialMC * valorDiaMaterial);
+    const diamantesRestantesFinal = diamantesRestantesAposMaterial - diamantesNecessariosParaCunhagem;
+
+    // Calcula os materiais restantes após a cunhagem das MCs
+    const materiaisRestantes = totalMateriais - (totalMC * qtdMaterialMC);
+
+    // Venda de MC por Crow
+    const ganhoCrow = totalMC * precoVendaCrowMC;
+
+    // Conversão de Crow para Dólar
+    const ganhoDolar = ganhoCrow * valorCrowDolar;
+
+    // Conversão de Dólar para Real
+    const ganhoFinalReais = ganhoDolar * valorDolarReais;
+
+    return {
+        totalDiamantesComprados,
+        totalMateriais,
+        totalMC,
+        diamantesRestantesFinal,
+        materiaisRestantes,
+        ganhoCrow,
+        ganhoDolar,
+        ganhoFinalReais
+    };
+}
+
 </script>
 
 
