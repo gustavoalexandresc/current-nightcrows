@@ -18,6 +18,9 @@
     margin: 0;
     padding: 20px;
   }
+  table{
+    margin-top: 15px;
+  }
   #loginArea {
     position: fixed;
     text-align: center;
@@ -121,10 +124,12 @@
     overflow-x: auto;
     max-width: 100%; /* Ajuste a largura máxima conforme necessário */
   }
+
   .divTabelaRolavel td, .divTabelaRolavel th {
     padding: 4px 8px; /* Reduz o padding */
     font-size: 14px; /* Ajuste o tamanho da fonte conforme necessário */
     min-width: 60px; /* Ou outro valor conforme a necessidade */
+    align-items: center;
   }
   #divTabelaRolavel img {
     width: 20px; /* Ou outro valor conforme necessário */
@@ -182,31 +187,38 @@
     <div id="moedasInput">
       <div id="inputArea" style="margin-bottom: 20px; margin-top: 4px;">
         <div class="input-container">
-          <label for="CROW">Crows</label>
+          <label for="CROW">Crows:</label>
+          <img src="/moedas/crow.webp" style="width: 20px; height: 20px; margin-left: -15px;">
           <input type="number" id="CROW">
         </div>
         <div class="input-container">
-          <label for="PRO">Token</label>
+          <label for="PRO">Token:</label>
+          <img src="/moedas/token.webp" style="width: 20px; height: 20px; margin-left: -15px;">
           <input type="number" id="PRO">
         </div>
         <div class="input-container">
-          <label for="PAP">Papyrus</label>
+          <label for="PAP">Papyrus:</label>
+          <img src="/moedas/papyrus.webp" style="width: 20px; height: 20px; margin-left: -15px;">
           <input type="number" id="PAP">
         </div>
         <div class="input-container">
-          <label for="MOR">Morion</label>
+          <label for="MOR">Morion:</label>
+          <img src="/moedas/morion.webp" style="width: 20px; height: 20px; margin-left: -15px;">
           <input type="number" id="MOR">
         </div>
         <div class="input-container">
-          <label for="GEA">Peça de vôo</label>
+          <label for="GEA">Peça de vôo:</label>
+          <img src="/moedas/peca-voo.webp" style="width: 20px; height: 20px; margin-left: -15px;">
           <input type="number" id="GEA">
         </div>
         <div class="input-container">
-          <label for="FEA">Ceu Azul</label>
+          <label for="FEA">Ceu Azul:</label>
+          <img src="/moedas/ceu-azul.webp" style="width: 20px; height: 20px; margin-left: -15px;">
           <input type="number" id="FEA">
         </div>
         <div class="input-container">
-          <label for="TEA">Lágrima congelada</label>
+          <label for="TEA">Lágrima congelada:</label>
+          <img src="/moedas/lagrima-congelada.webp" style="width: 20px; height: 20px; margin-left: -15px;">
           <input type="number" id="TEA">
         </div>
         <button class="button-comun" style="cursor: pointer;" onclick="atualizarJSON()">Atualizar Moedas</button>
@@ -225,8 +237,68 @@
       <span>Lucro(crow) = Lucro em crow, commitando os diamantes</span><br>
     </div>
 
+    <h3 style="margin-top: 16px;">
+      Tabela de lucro Dentro do jogo usando Morion
+      <img src="/moedas/morion-moeda.webp" style="width: 20px; height: 20px;">
+      <img src="/moedas/morion.webp" style="width: 20px; height: 20px;">
+    </h3>    
+    <div id="divLucroMOR" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">
+      Tabela de lucro Dentro do jogo usando Papyrus
+      <img src="/moedas/papyrus-moeda.webp" style="width: 20px; height: 20px;">
+      <img src="/moedas/papyrus.webp" style="width: 20px; height: 20px;">
+    </h3>
+    <div id="divLucroPAP" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">
+      Tabela de lucro Dentro do jogo usando GEA
+      <img src="/moedas/gear.webp" style="width: 20px; height: 20px;">
+      <img src="/moedas/peca-voo.webp" style="width: 20px; height: 20px;">
+    </h3>
+    <div id="divLucroGEA" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">
+      Tabela de lucro Dentro do jogo usando FEA
+      <img src="/moedas/feather.webp" style="width: 20px; height: 20px;">
+      <img src="/moedas/ceu-azul.webp" style="width: 20px; height: 20px;">
+    </h3>
+    <div id="divLucroFEA" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">
+      Tabela de lucro Dentro do jogo usando TEA
+      <img src="/moedas/tear.webp" style="width: 20px; height: 20px;">
+      <img src="/moedas/lagrima-congelada.webp" style="width: 20px; height: 20px;">
+    </h3>
+    <div id="divLucroTEA" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
+    <h3 style="margin-top: 16px;">
+      Tabela de lucro Dentro do jogo usando PRO
+      <img src="/moedas/promote.webp" style="width: 20px; height: 20px;">
+      <img src="/moedas/token.webp" style="width: 20px; height: 20px;">
+    </h3>
+    <div id="divLucroPRO" class="divTabelaRolavel"></div>   
+    <div style="color: rgb(233, 72, 72);">
+      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
+    </div> 
+
     <div id="reaisInput">
-      <div id="inputArea" style="margin-bottom: 20px; margin-top: 4px;">
+      <div id="inputArea" style="margin-bottom: 20px; margin-top: 16px;">
         <div class="input-container">
           <label for="reaisTotal">Valor em Reais</label>
           <input type="number" id="reaisTotal">
@@ -255,42 +327,6 @@
       <span>Dia/Reais = X diamante comprados com o Reais/Dia</span><br>
       <span>Reais > 1 Dolar = Quanto em reais vale 1 dolar</span><br>
     </div>       
-
-    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando Morion</h3>
-    <div id="divLucroMOR" class="divTabelaRolavel"></div>   
-    <div style="color: rgb(233, 72, 72);">
-      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
-    </div> 
-
-    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando Papyrus</h3>
-    <div id="divLucroPAP" class="divTabelaRolavel"></div>   
-    <div style="color: rgb(233, 72, 72);">
-      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
-    </div> 
-
-    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando GEA</h3>
-    <div id="divLucroGEA" class="divTabelaRolavel"></div>   
-    <div style="color: rgb(233, 72, 72);">
-      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
-    </div> 
-
-    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando FEA</h3>
-    <div id="divLucroFEA" class="divTabelaRolavel"></div>   
-    <div style="color: rgb(233, 72, 72);">
-      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
-    </div> 
-
-    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando TEA</h3>
-    <div id="divLucroTEA" class="divTabelaRolavel"></div>   
-    <div style="color: rgb(233, 72, 72);">
-      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
-    </div> 
-
-    <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo usando PRO</h3>
-    <div id="divLucroPRO" class="divTabelaRolavel"></div>   
-    <div style="color: rgb(233, 72, 72);">
-      <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
-    </div> 
 
     <h3 style="margin-top: 16px;">Tabela custo Commit</h3>
     <div id="tabCusto"></div>        
@@ -380,6 +416,7 @@
 
     // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
     data.forEach(obj => {
+      const imgMoedaUser = `<img src="${obj.imgMoeda}" style="width: 20px; height: 20px;">`
       if(obj.id != 'CROW'){
         const lucroInvestimento = calcularLucroInvestimentoDiamante(obj.precoGame, obj.qtdMaterial, obj.diaCommit, obj.precoCrow, 
                                   crowDolarVar, dolarReaisVar, totalDiamantesComprados)
@@ -395,24 +432,24 @@
         }
         // Cria as células (td) e as adiciona à linha (tr)
         const tdValues = [
-          obj.id,
-          obj.precoGame,
+          `${obj.id} ${imgMoedaUser}`,
+          `${obj.precoGame} <img src="${obj.imgMaterial}" alt="Ícone" style="width: 20px; height: 20px;">`,
           obj.qtdMaterial,
           obj.diaCommit,
           obj.precoCrow,
-          lucroInvestimento.totalMateriais,
+          parseFloat(lucroInvestimento.totalMateriais.toFixed(3)),
           lucroInvestimento.totalMC,
-          lucroInvestimento.materiaisRestantes,
+          parseFloat(lucroInvestimento.materiaisRestantes.toFixed(3)),
           lucroInvestimento.diamantesRestantesFinal,
-          lucroInvestimento.ganhoCrow,
-          lucroInvestimento.ganhoDolar,
-          lucroInvestimento.ganhoFinalReais,
-          lucroInvestimento.ganhoFinalReais-reaisTotalVar 
+          parseFloat(lucroInvestimento.ganhoCrow.toFixed(3)),
+          parseFloat(lucroInvestimento.ganhoDolar.toFixed(3)),
+          parseFloat(lucroInvestimento.ganhoFinalReais.toFixed(3)),
+          parseFloat((lucroInvestimento.ganhoFinalReais-reaisTotalVar).toFixed(3)) 
         ];
 
         tdValues.forEach(val => {
             const td = document.createElement("td");
-            td.innerText = val;
+            td.innerHTML = val;            
             tr.appendChild(td);
         });
 
@@ -451,25 +488,27 @@
 
     // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
     data.forEach(obj => {
+        const imgMoedaUser = `<img src="${obj.imgMoeda}" style="width: 25px; height: 25px;">`
         const tr = document.createElement("tr");
         if(obj.id == 'CROW' && obj.precoDolar>=0.75){   
-          if(obj.precoDolar > 0.75 && obj.precoDolar <= 0.77){       
-            var alarme = new Audio('./audios/lvlup.mp3');
+          if(obj.precoDolar > 0.75 && obj.precoDolar <= 0.77){   
+            var alarme = new Audio(`${baseURL}/audios/lvlup.mp3`);
             alarme.play();
             tr.className = 'color-danger';
           }else if(obj.precoDolar == 0.75){     
-            var alarme = new Audio('./audios/bell.mp3');
+            console.log(`${baseURL}/audios/bell.mp3`)
+            var alarme = new Audio(`${baseURL}/audios/bell.mp3`);
             alarme.play();
             tr.className = 'color-warning';
-          }else if(obj.precoDolar > 0.77){     
-            var alarme = new Audio('./audios/cash.mp3');
+          }else if(obj.precoDolar > 0.77){   
+            var alarme = new Audio(`${baseURL}/audios/cash.mp3`);  
             alarme.play();
             tr.className = 'color-sucess';
           }
         }
         // Cria as células (td) e as adiciona à linha (tr)
         const tdValues = [
-            `${obj.nome} (${obj.id})`,
+            `${obj.nome} (${obj.id}) ${imgMoedaUser}`,
             `${obj.precoCrow}CROW / ${obj.precoDolar}$`,
             obj.change,
             `${obj.volCrow} / ${obj.volDolar}`,
@@ -478,7 +517,7 @@
 
         tdValues.forEach(val => {
             const td = document.createElement("td");
-            td.innerText = val;
+            td.innerHTML = val;            
             tr.appendChild(td);
         });
 
@@ -503,6 +542,7 @@
         // Limpa a tabela antes de adicionar novos dados
         table.innerHTML = `
           <tr>
+            <th></th>
             <th>USE>CONVERT</th>
             <th>valorMC(CROW/u)</th>
             <th>precoMoedaMCParaLucro</th>
@@ -525,7 +565,7 @@
         spanSaldoInicialCrow.style.display = "block"; // Exibe o span em sua própria linha
         spanPrecoCrowMU.textContent = `Valor da moeda em crow: ${obj.precoCrow}`
         spanPrecoCrowMU.style.display = "block"; // Exibe o span em sua própria linha
-        spanValorDiamanteMU.textContent = `Valor do material no jogo(dia): ${obj.precoGame}`
+        spanValorDiamanteMU.innerHTML = `Valor do material no jogo(dia): ${obj.precoGame} <img src="${obj.imgMaterial}" alt="Ícone" style="width: 20px; height: 20px;">`
         spanValorDiamanteMU.style.display = "block"; // Exibe o span em sua própria linha    
         // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela    
         data.forEach(objConvert => {
@@ -536,19 +576,18 @@
               objConvert.qtdMaterial)
 
               const tr = document.createElement("tr");
-
               const imgMoedaUser = `<img src="${obj.imgMoeda}" alt="Ícone" style="width: 20px; height: 20px;">`
               const imgMoedaConvert = `<img src="${objConvert.imgMoeda}" alt="Ícone" style="width: 20px; height: 20px;">`
-              const imgMoeda = `${imgMoedaUser}>>${imgMoedaConvert}`
+              const imgMoeda = `${imgMoedaUser}>${imgMoedaConvert}`
               const nomeMoeda = `${obj.id}>>${objConvert.id}`
               const crowsUsadasParaMU = opEntreMoedas.crowsUsadasParaMU
               const qtdMoedasMU = opEntreMoedas.quantidadeCompradaMU
               const diamantesGanhosComMU = opEntreMoedas.diamantesGanhosComMU
               const valorMC = objConvert.precoCrow
               const precoMoedaMCParaLucro = opEntreMoedas.precoVendaCrowMCParaLucro
-              const valorGameMC = objConvert.precoGame
+              const valorGameMC = `${objConvert.precoGame} <img src="${objConvert.imgMaterial}" alt="Ícone" style="width: 20px; height: 20px;">`
               const qtdPossivelMC = opEntreMoedas.qtdPossivelMC
-              const diamantesRestantes = opEntreMoedas.diamantesRestantes
+              const diamantesRestantes = parseFloat(opEntreMoedas.diamantesRestantes.toFixed(3))
               const materiaisRestantes = opEntreMoedas.materiaisRestantes
               const ganhoCrow = opEntreMoedas.ganhoCrow
               const lucroPrejuizo = opEntreMoedas.ganhoCrow-crowsUsadasParaMU
@@ -571,8 +610,11 @@
               }
 
               // Cria as células (td) e as adiciona à linha (tr)
-              const tdValues = [
-                nomeMoeda,
+              const td = document.createElement("td");
+
+              const tdValues = [  
+                imgMoeda,  
+                nomeMoeda,            
                 valorMC,
                 precoMoedaMCParaLucro,
                 valorGameMC,
@@ -584,7 +626,7 @@
               ];
               tdValues.forEach(val => {
                   const td = document.createElement("td");
-                  td.innerText = val;
+                  td.innerHTML = val;                  
                   tr.appendChild(td);
               });
 
@@ -628,9 +670,12 @@
     const minhasCrows = document.getElementById('CROW').value
     // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
     data.forEach(obj => {
+        const imgMoedaUser = `<img src="${obj.imgMoeda}" style="width: 25px; height: 25px;">`
+
         if(obj.id != 'CROW'){         
           const tr = document.createElement("tr");
-          const moeda = obj.id
+          
+          const moeda = `${obj.id} ${imgMoedaUser}`
           const qtdCrowSeraUsado = parseFloat((Math.floor(minhasCrows/obj.precoCrow)*obj.precoCrow).toFixed(3));
           const precoCrow = obj.precoCrow
           const precoGame = obj.precoGame
@@ -645,7 +690,7 @@
             moeda,
             qtdCrowSeraUsado,
             precoCrow,
-            precoGame,
+            `${precoGame} <img src="${obj.imgMaterial}" alt="Ícone" style="width: 25px; height: 25px;">`,
             qtdMorionComprado,
             qtdCompraMatDiaCrow,
             valorDiamanteCrowUsadoEmDiamante,
@@ -655,7 +700,7 @@
           ];
           tdValues.forEach(val => {
               const td = document.createElement("td");
-              td.innerText = val;
+              td.innerHTML = val;              
               tr.appendChild(td);
           });
 
@@ -688,11 +733,12 @@
     // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
     data.forEach(obj => {
         const tr = document.createElement("tr");
+        const imgMoedaUser = `<img src="${obj.imgMoeda}" style="width: 20px; height: 20px;">`
 
         // Cria as células (td) e as adiciona à linha (tr)
         const tdValues = [
-            obj.id,
-            obj.material,
+            `${obj.id} ${imgMoedaUser}`,
+            `${obj.material} <img src="${obj.imgMaterial}" alt="Ícone" style="width: 20px; height: 20px;">`,
             obj.qtdMaterial,
             `${obj.diaCommit}(dia)`,
             `${obj.precoGame}(dia)`,
@@ -701,7 +747,7 @@
 
         tdValues.forEach(val => {
             const td = document.createElement("td");
-            td.innerText = val;
+            td.innerHTML = val;            
             tr.appendChild(td);
         });
 
