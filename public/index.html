@@ -86,6 +86,11 @@
     border: 1px solid #cccccc;
     border-radius: 4px;
   }
+
+  .input-container select {
+    padding: 8px;
+    box-sizing: border-box;
+  }
   #buttonContainer {
     /* Isso faz com que o botão fique à direita */
     display: flex; /* Usa flexbox para permitir alinhamento */
@@ -225,6 +230,46 @@
       </div>
     </div>
 
+    <div id="reaisInput">
+      <div id="inputArea" style="margin-bottom: 10px; margin-top: 16px;">
+        <div class="input-container">
+          <label for="crowTabDima">CROW</label>
+          <input type="number" id="crowTabDima">
+        </div>
+        <div class="input-container">
+          <label for="reaisTabDima">Reais</label>
+          <input type="number" id="reaisTabDima">
+        </div>
+        <div class="input-container">
+          <label for="dolarTabDima">Dolar</label>
+          <input type="number" id="dolarTabDima">
+        </div>
+        <div class="input-container">
+          <label for="reaisDolarDima">Reais > 1 Dolar</label>
+          <input type="number" id="reaisDolarDima">
+        </div>
+
+        <div class="input-container">
+          <label for="selectDimaPorReais">MOEDA:</label>
+          <select id="selectDimaPorReais">
+            <option value="reais" selected>REAIS</option>
+            <option value="dolar">DOLAR</option>
+            <option value="crow">CROW</option>
+          </select>
+        </div>
+        <button class="button-comun" style="cursor: pointer;" onclick="atualizarValoresTabDima()">Atualizar Tabela Reais</button>
+      </div>
+    </div>
+    <div style="color: rgb(214, 182, 0);">
+      <br><span>Valor em Reais = Total que voce vai gastar em real</span><br>
+      <span>Reais/Dia = Quanto reais para fazer x Diamante.</span><br>
+      <span>Dia/Reais = X diamante comprados com o Reais/Dia</span><br>
+      <span>Reais > 1 Dolar = Quanto em reais vale 1 dolar</span><br>
+    </div>       
+
+    <h3 style="margin-top: 16px;">Tabela de quanto diamante por DOL/Reais</h3>
+    <div id="divDima" class="divTabelaRolavel"></div>     
+
     <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo com CROW(HARD)</h3>
     <div id="divLucroCrowHard"></div>   
     <div style="color: rgb(233, 72, 72);">
@@ -295,10 +340,10 @@
     <div id="divLucroPRO" class="divTabelaRolavel"></div>   
     <div style="color: rgb(233, 72, 72);">
       <br><span>MC = MOEDA QUE SERA CONVERTIDA</span><br>
-    </div> 
+    </div>     
 
     <div id="reaisInput">
-      <div id="inputArea" style="margin-bottom: 20px; margin-top: 16px;">
+      <div id="inputArea" style="margin-bottom: 10px; margin-top: 16px;">
         <div class="input-container">
           <label for="reaisTotal">Valor em Reais</label>
           <input type="number" id="reaisTotal">
@@ -318,15 +363,9 @@
         <button class="button-comun" style="cursor: pointer;" onclick="atualizarValoresReais()">Atualizar Tabela Reais</button>
       </div>
     </div>
-
+        
     <h3 style="margin-top: 16px;">Tabela de lucro Dentro do jogo comprando diamante por Reais</h3>
-    <div id="divReais" class="divTabelaRolavel"></div>    
-    <div style="color: rgb(214, 182, 0);">
-      <br><span>Valor em Reais = Total que voce vai gastar em real</span><br>
-      <span>Reais/Dia = Quanto reais para fazer x Diamante.</span><br>
-      <span>Dia/Reais = X diamante comprados com o Reais/Dia</span><br>
-      <span>Reais > 1 Dolar = Quanto em reais vale 1 dolar</span><br>
-    </div>       
+    <div id="divReais" class="divTabelaRolavel"></div>   
 
     <h3 style="margin-top: 16px;">Tabela custo Commit</h3>
     <div id="tabCusto"></div>        
@@ -342,6 +381,11 @@
   const valorDiaReais = 1000
   const valorRealDolar = 5.02
 
+  const crowTabDima = 0
+  const reaisTabDima = 50
+  const dolarTabDima = 0
+  const reaisDolarDima = 5.09
+
   var dataAtualizada;
 
 
@@ -355,12 +399,93 @@
     addTabCusto(data);
     addTabLucro(data);
     addTabsMoedas(data);
-    addTabReais(data)
+    addTabReais(data);
+    addTabDima(data);
   }
 
   function atualizarValoresReais(data) {
     addTabReais(dataAtualizada)
   }
+
+  function atualizarValoresTabDima(data) {
+    console.log('entrei1111')
+
+    addTabDima(dataAtualizada)
+  }
+
+  // Função para adicionar dados na tabela
+  function addTabDima(data) {
+    console.log('entrei22222')
+    const crowTabDima = parseFloat(document.getElementById("crowTabDima").value) || 0;
+    const reaisTabDima = parseFloat(document.getElementById("reaisTabDima").value) || 0;
+    const dolarTabDima = parseFloat(document.getElementById("dolarTabDima").value) || 0;
+    const reaisDolarDima = parseFloat(document.getElementById("reaisDolarDima").value) || 5.09;
+    const selectDimaPorReais = document.getElementById("selectDimaPorReais").value;
+    let crowFinalDima = 0
+
+    if(selectDimaPorReais === 'reais'){      
+      crowFinalDima = reaisTabDima/reaisDolarDima/0.76    
+    }else if(selectDimaPorReais === 'crow'){
+      crowFinalDima = crowTabDima
+    }else if(selectDimaPorReais === 'dolar'){
+      crowFinalDima = dolarTabDima/0.76
+    }
+    console.log(`${crowTabDima} - ${reaisTabDima} - ${dolarTabDima} - ${reaisDolarDima} - ${selectDimaPorReais}`)
+    console.log(crowFinalDima)
+    const divTable = document.getElementById("divDima");
+    const existingTable = document.getElementById("divDimaTable");
+    if (existingTable) {
+      existingTable.remove(); // Remove a tabela existente corretamente
+    }
+    const table = document.createElement("table");
+    table.id = "divDimaTable"; // Atribui um ID à nova tabela
+    const spans = divTable.querySelectorAll("span");
+    spans.forEach(span => span.remove());
+
+    // Limpa a tabela antes de adicionar novos dados
+    table.innerHTML = `
+      <tr>
+        <th>MOEDA</th>
+        <th>PrecoGame</th>
+        <th>qtdMoeda</th>
+        <th>qtdMaterialTotal</th>
+        <th>qtdDiaPorMatVendido</th>
+        <th>qtdDiamantesTotal</th>
+      </tr>`;
+
+    // Itera sobre os objetos JSON e adiciona cada um como uma linha da tabela
+    data.forEach(obj => {
+      const imgMoedaUser = `<img src="${obj.imgMoeda}" style="width: 20px; height: 20px;">`
+      if(obj.id != 'CROW'){
+
+        const valorDiaRecebidoMaterial = obj.precoGame*0.95;
+        
+        const qtdMoedaComprada = Math.floor(crowFinalDima / obj.precoCrow);
+
+        const tr = document.createElement("tr");
+        
+        // Cria as células (td) e as adiciona à linha (tr)
+        const tdValues = [
+          `${obj.id} ${imgMoedaUser}`,
+          `${obj.precoGame} <img src="${obj.imgMaterial}" alt="Ícone" style="width: 20px; height: 20px;">`,
+          qtdMoedaComprada,
+          qtdMoedaComprada*obj.qtdMaterial,
+          valorDiaRecebidoMaterial,
+          valorDiaRecebidoMaterial*(qtdMoedaComprada*obj.qtdMaterial)
+        ];
+
+        tdValues.forEach(val => {
+            const td = document.createElement("td");
+            td.innerHTML = val;            
+            tr.appendChild(td);
+        });
+
+        table.appendChild(tr);     
+      }
+    });
+    divTable.appendChild(table);
+}
+
   // Função para adicionar dados na tabela
   function addTabReais(data) {
 
@@ -850,6 +975,11 @@
       document.getElementById("reaisDia").value = valorReaisPorDia
       document.getElementById("diaReais").value = valorDiaReais
       document.getElementById("reaisDolar").value = valorRealDolar
+
+      document.getElementById("crowTabDima").value = crowTabDima
+      document.getElementById("reaisTabDima").value = reaisTabDima
+      document.getElementById("dolarTabDima").value = dolarTabDima
+      document.getElementById("reaisDolarDima").value = reaisDolarDima
       fetchData();
       obterDados()
     } else {
