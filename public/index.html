@@ -448,6 +448,7 @@
         <th>MOEDA</th>
         <th>PrecoGame</th>
         <th>qtdMoeda</th>
+        <th>qtdCrowsUsados</th>
         <th>qtdMaterialTotal</th>
         <th>qtdDiaPorMatVendido</th>
         <th>qtdDiamantesTotal</th>
@@ -458,7 +459,7 @@
       const imgMoedaUser = `<img src="${obj.imgMoeda}" style="width: 20px; height: 20px;">`
       if(obj.id != 'CROW'){
 
-        const valorDiaRecebidoMaterial = obj.precoGame*0.95;
+        const valorDiaRecebidoMaterial = Math.floor(obj.precoGame*0.95);
         
         const qtdMoedaComprada = Math.floor(crowFinalDima / obj.precoCrow);
 
@@ -469,9 +470,10 @@
           `${obj.id} ${imgMoedaUser}`,
           `${obj.precoGame} <img src="${obj.imgMaterial}" alt="Ícone" style="width: 20px; height: 20px;">`,
           qtdMoedaComprada,
+          Math.floor(Math.floor(crowFinalDima / obj.precoCrow)*obj.precoCrow),
           qtdMoedaComprada*obj.qtdMaterial,
           valorDiaRecebidoMaterial,
-          valorDiaRecebidoMaterial*(qtdMoedaComprada*obj.qtdMaterial)
+          Math.floor(valorDiaRecebidoMaterial*(qtdMoedaComprada*obj.qtdMaterial))
         ];
 
         tdValues.forEach(val => {
